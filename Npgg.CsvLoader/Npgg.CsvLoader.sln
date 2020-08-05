@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30309.148
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Npgg.CsvLoader", "Npgg.CsvLoader\Npgg.CsvLoader.csproj", "{EC22D161-C1EB-4A48-8895-0EADA2957C94}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Npgg.CsvLoader.Tests", "Npgg.CsvLoader.Tests\Npgg.CsvLoader.Tests.csproj", "{3C0AE7D2-DC12-4EE0-AAB8-3A8426216E7F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EC22D161-C1EB-4A48-8895-0EADA2957C94}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC22D161-C1EB-4A48-8895-0EADA2957C94}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC22D161-C1EB-4A48-8895-0EADA2957C94}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC22D161-C1EB-4A48-8895-0EADA2957C94}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3C0AE7D2-DC12-4EE0-AAB8-3A8426216E7F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C0AE7D2-DC12-4EE0-AAB8-3A8426216E7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C0AE7D2-DC12-4EE0-AAB8-3A8426216E7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C0AE7D2-DC12-4EE0-AAB8-3A8426216E7F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9802E29A-C26C-40FA-90FC-8DC0887782CC}
+	EndGlobalSection
+EndGlobal

@@ -8,7 +8,7 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace Npgg.Configuration
+namespace Npgg.CsvLoader
 {
     public abstract class CsvLoader
     {
