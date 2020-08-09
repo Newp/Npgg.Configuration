@@ -10,6 +10,68 @@ using System.Text.RegularExpressions;
 
 namespace Npgg.CsvLoader
 {
+
+
+    public class SimpleLoader
+    {
+        const string _splitPattern = @",(?=(?:[^""]*""[^""]*"")*(?![^""]*""))";
+        Regex regex = new Regex(_splitPattern);
+        protected void SplitRow(string rowString) => regex.Split(rowString);
+        protected List<string[]> Split(string tableString)
+        {
+            Regex reg = new Regex(_splitPattern);
+
+            var result = new List<string[]>();
+
+            using (StringReader reader = new StringReader(tableString))
+            {
+                var columnString = reader.ReadLineAsync();
+                string[] columTextList = reg.Split(tableString);
+
+                result.Add(columTextList);
+            }
+
+            var column = result.First();
+            return result;
+        }
+
+        public List<T> Load<T>(string tableString) where T : new()
+        {
+            var type = typeof(T);
+
+            var properties = type.GetMembers()
+                .Where(pi=> pi.MemberType == MemberTypes.Field || pi.MemberType == MemberTypes.Property)
+                .ToDictionary(member => member.Name);
+
+            var rows = this.Split(tableString);
+            var columns = rows[0];
+            for(int columnIndex = 0; columnIndex  < columns.Length; columnIndex++)
+            {
+                var columnName = columns[columnIndex];
+
+                if(properties.TryGetValue(columnName, out var memberInfo) == false)
+                {
+                    continue;
+                }
+
+
+            }
+
+            throw new NotImplementedException();
+        }
+
+        class Binder
+        {
+            public string ColumnName { get; set; }
+            
+        }
+        
+        
+    }
+
+    
+
+
     public abstract class CsvLoader
     {
 

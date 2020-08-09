@@ -16,8 +16,7 @@ namespace Npgg.CsvLoader
         public string ColumnName { get; private set; }
         public Type ValueType { get; private set; }
         public Type CollectionType { get; private set; }
-        private List<string> _enumList = null;
-        public IEnumerable<string> EnumList { get { return this._enumList; } }
+        
 
         private Func<string, object> ValueParser { get; set; }
         
