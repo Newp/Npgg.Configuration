@@ -1,4 +1,4 @@
-﻿//source : https://www.codeproject.com/Articles/993798/FieldInfo-PropertyInfo-GetValue-SetValue-Alternati
+//source : https://www.codeproject.com/Articles/993798/FieldInfo-PropertyInfo-GetValue-SetValue-Alternati
 //lisence : The Code Project Open License(CPOL)
 
 using System;
@@ -7,7 +7,7 @@ using System.Reflection;
 
 namespace Npgg.CsvLoader
 {
-    public class MemberAssigner : IGetSet
+    public class MemberAssigner
     {
         private readonly static MethodInfo sm_valueAssignerMethod
             = typeof(MemberAssigner).GetMethod("ValueAssigner", BindingFlags.Static | BindingFlags.NonPublic);

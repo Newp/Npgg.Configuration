@@ -1,6 +1,5 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -9,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Npgg.CsvLoader
 {
-    public class SimpleLoader
+    public partial class SimpleLoader
     {
         const string _splitPattern = @",(?=(?:[^""]*""[^""]*"")*(?![^""]*""))";
         Regex regex = new Regex(_splitPattern);
@@ -36,7 +35,8 @@ namespace Npgg.CsvLoader
                 {
                     var columnName = columns[columnIndex];
 
-                    if (members.TryGetValue(columnName, out var memberInfo) == false)
+                    if (columnName.StartsWith("#")
+                        || members.TryGetValue(columnName, out var memberInfo) == false)
                     {
                         continue;
                     }
@@ -51,6 +51,8 @@ namespace Npgg.CsvLoader
                     var line = await reader.ReadLineAsync();
 
                     if (line == null) break;
+
+                    if (line.StartsWith("#")) continue; //주석
 
                     var row = regex.Split(line);
                     T item = new T();
@@ -70,22 +72,6 @@ namespace Npgg.CsvLoader
 
             return result;
 
-        }
-
-        public class BindInfo
-        {
-            public string ColumnName { get; set; }
-            public int RawIndex { get; set; }
-            public MemberAssigner Assigner { get; set; }
-            public TypeConverter Converter { get; set; }
-
-            public BindInfo(string columnName, int rawIndex, MemberInfo memberInfo)
-            {
-                this.ColumnName = columnName;
-                this.RawIndex = rawIndex;
-                this.Assigner = new MemberAssigner(memberInfo);
-                this.Converter = TypeDescriptor.GetConverter(this.Assigner.ValueType);
-            }
         }
         
         

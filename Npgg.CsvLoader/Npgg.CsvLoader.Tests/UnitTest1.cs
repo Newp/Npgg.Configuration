@@ -41,25 +41,77 @@ namespace Npgg.CsvParser.Tests
         [Fact]
         public void CsvLoadTest()
         {
-            string csv = 
+            string csv =
 @"Key,Value
+0,Value0
 1,Value1
-2,Value2
 ";
             SimpleLoader loader = new SimpleLoader();
 
-            var loaded =loader.Load<CsvSample>(csv).Result;
+            var loaded = loader.Load<CsvSample>(csv).Result;
 
             Assert.Equal(2, loaded.Count);
 
-            for(int i =1;i<3;i++)
+            for (int i = 0; i < 2; i++)
             {
                 var item = loaded[i];
 
                 Assert.Equal(i, item.Key);
-                Assert.Equal("Value"+ i, item.Value);
+                Assert.Equal("Value" + i, item.Value);
             }
+        }
 
+
+        [Fact]
+        public void Row주석테스트()
+        {
+            string csv =
+@"Key,Value
+1,Value1
+#2,Value2
+2,Value2
+";
+            SimpleLoader loader = new SimpleLoader();
+
+            var loaded = loader.Load<CsvSample>(csv).Result;
+
+            Assert.Equal(2, loaded.Count);
+
+            {
+                var item = loaded.First();
+
+                Assert.Equal(1, item.Key);
+                Assert.Equal("Value1", item.Value);
+            }
+            {
+                var item = loaded.Last();
+
+                Assert.Equal(2, item.Key);
+                Assert.Equal("Value2", item.Value);
+            }
+        }
+
+        [Fact]
+        public void Column주석테스트()
+        {
+            string csv =
+@"Key,#Value
+0,Value0
+1,Value1
+";
+            SimpleLoader loader = new SimpleLoader();
+
+            var loaded = loader.Load<CsvSample>(csv).Result;
+
+            Assert.Equal(2, loaded.Count);
+
+            for (int i = 0; i < 2; i++)
+            {
+                var item = loaded[i];
+
+                Assert.Equal(i, item.Key);
+                Assert.Null(item.Value);
+            }
         }
 
         public class CsvSample

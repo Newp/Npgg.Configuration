@@ -10,9 +10,6 @@ using System.Text.RegularExpressions;
 namespace Npgg.CsvLoader
 {
 
-
-
-
     public abstract class CsvLoader
     {
 

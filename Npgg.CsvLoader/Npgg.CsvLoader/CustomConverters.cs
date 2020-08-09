@@ -1,4 +1,4 @@
-﻿using Npgg.CsvLoader;
+using Npgg.CsvLoader;
 //using UnityEngine;
 using System;
 using System.Collections.Generic;
