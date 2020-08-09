@@ -23,44 +23,67 @@ namespace Npgg.CsvLoader
 
         public void SetValue(object targetObject, object memberValue) => setter(targetObject, memberValue);
 
+        public readonly Type DeclaringType;
+        public readonly Type ValueType;
 
         public MemberAssigner(MemberInfo memberInfo)
         {
-            if (memberInfo == null)
-                throw new ArgumentNullException("Must initialize with a non-null Field or Property");
-
+            this.DeclaringType = memberInfo.DeclaringType;
             MemberExpression exMember = null;
+            Func<Expression, MemberExpression> getMemberExpression;
+            Func<Expression, Expression, MethodCallExpression> makeCallExpression;
 
             if (memberInfo is FieldInfo fi)
             {
+                this.ValueType = fi.FieldType;
                 var assignmentMethod = sm_valueAssignerMethod.MakeGenericMethod(fi.FieldType);
 
-                Init(fi.DeclaringType
-                    ,fi.FieldType
-                    ,_ex => exMember = Expression.Field(_ex, fi) 
-                    ,(_, _val) => Expression.Call(assignmentMethod, exMember, _val) 
-                    ,out this.getter
-                    ,out this.setter
-                );
+                getMemberExpression = _ex => exMember = Expression.Field(_ex, fi);
+                makeCallExpression = (_, _val) => Expression.Call(assignmentMethod, exMember, _val);
             }
             else if (memberInfo is PropertyInfo pi)
             {
+                this.ValueType = pi.PropertyType;
                 var assignmentMethod = pi.GetSetMethod(true);
 
-                Init(pi.DeclaringType
-                    , pi.PropertyType
-                    ,_ex => exMember = Expression.Property(_ex, pi)
-                    ,(_obj, _val) => Expression.Call(_obj, assignmentMethod, _val) 
-                    ,out this.getter
-                    ,out this.setter
-                );
+                getMemberExpression = _ex => exMember = Expression.Property(_ex, pi);
+                makeCallExpression = (_obj, _val) => Expression.Call(_obj, assignmentMethod, _val);
             }
             else
             {
                 throw new ArgumentException
                 ("The member must be either a Field or a Property, not " + memberInfo.MemberType);
             }
+
+            Init( getMemberExpression
+                    , makeCallExpression
+                    , out this.getter
+                    , out this.setter
+                );
+
         }
+
+        private void Init(
+            Func<Expression, MemberExpression> getMember,
+            Func<Expression, Expression, MethodCallExpression> makeCallExpression,
+            out Func<object, object> getter,
+            out Action<object, object> setter)
+        {
+            var exObjParam = Expression.Parameter(typeof(object), "theObject");
+            var exValParam = Expression.Parameter(typeof(object), "theProperty");
+
+            var exObjConverted = Expression.Convert(exObjParam, this.DeclaringType);
+            var exValConverted = Expression.Convert(exValParam, this.ValueType);
+
+            Expression exMember = getMember(exObjConverted);
+
+            Expression getterMember = ValueType.IsValueType ? Expression.Convert(exMember, typeof(object)) : exMember;
+            getter = Expression.Lambda<Func<object, object>>(getterMember, exObjParam).Compile();
+
+            Expression exAssignment = makeCallExpression(exObjConverted, exValConverted);
+            setter = Expression.Lambda<Action<object, object>>(exAssignment, exObjParam, exValParam).Compile();
+        }
+
 
         private void Init(
             Type objectType,
@@ -74,11 +97,11 @@ namespace Npgg.CsvLoader
             var exValParam = Expression.Parameter(typeof(object), "theProperty");
 
             var exObjConverted = Expression.Convert(exObjParam, objectType);
-            var exValConverted = Expression.Convert(exValParam, valueType);
+            var exValConverted = Expression.Convert(exValParam, ValueType);
 
             Expression exMember = getMember(exObjConverted);
 
-            Expression getterMember = valueType.IsValueType ? Expression.Convert(exMember, typeof(object)) : exMember;
+            Expression getterMember = ValueType.IsValueType ? Expression.Convert(exMember, typeof(object)) : exMember;
             getter = Expression.Lambda<Func<object, object>>(getterMember, exObjParam).Compile();
 
             Expression exAssignment = makeCallExpression(exObjConverted, exValConverted);

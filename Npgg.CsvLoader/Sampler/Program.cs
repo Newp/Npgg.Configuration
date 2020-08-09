@@ -17,9 +17,6 @@ namespace Sampler
         static void Test1()
         {
             var type = typeof(Sample1);
-
-
-            
             
             foreach(var member in type.GetMember("Value1"))
             {
@@ -31,22 +28,14 @@ namespace Sampler
                     gs.SetValue(obj, i.ToString());
                     var ret = gs.GetValue(obj);
                     
-                    if((string)ret != obj.Value1)
+                    if((int)ret != i)
                     {
 
                     }
+                  
                 });
 
-                var es2 = Run(count, new GetSet2(member), (gs, i) =>
-                {
-                    gs.SetValue(obj, i.ToString());
-                    var ret = gs.GetValue(obj);
-
-                    if ((string)ret != obj.Value1)
-                    {
-
-                    }
-                });
+      
             }
             
             
@@ -71,7 +60,7 @@ namespace Sampler
 
     class Sample1
     {
-        public string Value1 { get; set; }
+        public int Value1 { get; set; }
         //public int Value2 { get; set; }
         //public int Value3 { get; set; }
     }

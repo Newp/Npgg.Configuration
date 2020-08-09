@@ -2,6 +2,8 @@ using System;
 using Xunit;
 using Npgg.CsvLoader;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Npgg.CsvParser.Tests
 {
@@ -35,7 +37,39 @@ namespace Npgg.CsvParser.Tests
 
             Assert.Equal("1,2,3,4", generated);
         }
+
+        [Fact]
+        public void CsvLoadTest()
+        {
+            string csv = 
+@"Key,Value
+1,Value1
+2,Value2
+";
+            SimpleLoader loader = new SimpleLoader();
+
+            var loaded =loader.Load<CsvSample>(csv).Result;
+
+            Assert.Equal(2, loaded.Count);
+
+            for(int i =1;i<3;i++)
+            {
+                var item = loaded[i];
+
+                Assert.Equal(i, item.Key);
+                Assert.Equal("Value"+ i, item.Value);
+            }
+
+        }
+
+        public class CsvSample
+        {
+            public int Key { get; set; }
+            public string Value;
+        }
     }
+
+    
 
 
 
