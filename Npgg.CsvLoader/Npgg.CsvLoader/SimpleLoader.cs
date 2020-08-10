@@ -6,9 +6,9 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace Npgg.CsvLoader
+namespace Npgg
 {
-    public partial class SimpleLoader
+    public partial class CsvLoader
     {
         const string _splitPattern = @",(?=(?:[^""]*""[^""]*"")*(?![^""]*""))";
         Regex regex = new Regex(_splitPattern);

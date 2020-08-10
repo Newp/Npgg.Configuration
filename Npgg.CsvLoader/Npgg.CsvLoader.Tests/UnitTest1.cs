@@ -1,6 +1,5 @@
 using System;
 using Xunit;
-using Npgg.CsvLoader;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,12 +9,7 @@ namespace Npgg.CsvParser.Tests
     public class UnitTest1
     {
 
-
-        [Fact]
-        public void Test1()
-        {
-            
-        }
+        CsvLoader loader = new CsvLoader();
 
         
 
@@ -46,7 +40,6 @@ namespace Npgg.CsvParser.Tests
 0,Value0
 1,Value1
 ";
-            SimpleLoader loader = new SimpleLoader();
 
             var loaded = loader.Load<CsvSample>(csv);
 
@@ -71,7 +64,6 @@ namespace Npgg.CsvParser.Tests
 #2,Value2
 2,Value2
 ";
-            SimpleLoader loader = new SimpleLoader();
 
             var loaded = loader.Load<CsvSample>(csv);
 
@@ -99,7 +91,6 @@ namespace Npgg.CsvParser.Tests
 0,Value0
 1,Value1
 ";
-            SimpleLoader loader = new SimpleLoader();
 
             var loaded = loader.Load<CsvSample>(csv);
 

@@ -6,11 +6,11 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Npgg.CsvLoader.Tests
+namespace Npgg.Tests
 {
     public class ArrayConvertTests
     {
-        readonly SimpleLoader loader = new SimpleLoader();
+        readonly CsvLoader loader = new CsvLoader();
 
         string csv = @"Key,Values,Tag
 1,""1,2,3,4,5"",tag";
@@ -18,7 +18,7 @@ namespace Npgg.CsvLoader.Tests
         public void StringListTest()
         {
 
-            var list = loader.Load<sample<string>>(csv);
+            var list = loader.Load<ArraySample<string>>(csv);
 
             Assert.Single(list);
 
@@ -33,7 +33,7 @@ namespace Npgg.CsvLoader.Tests
         public void IntListTest()
         {
 
-            var list = loader.Load<sample<int>>(csv);
+            var list = loader.Load<ArraySample<int>>(csv);
 
             Assert.Single(list);
 
@@ -53,7 +53,7 @@ namespace Npgg.CsvLoader.Tests
             //var xx= converter.
         }
 
-        public class sample<T>
+        public class ArraySample<T>
         {
             public int Key { get; set; }
             public T[] Values { get; set; }

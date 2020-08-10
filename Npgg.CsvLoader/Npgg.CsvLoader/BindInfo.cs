@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reflection;
 
-namespace Npgg.CsvLoader
+namespace Npgg
 {
-    public partial class SimpleLoader
+    public partial class CsvLoader
     {
         public class BindInfo
         {

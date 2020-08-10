@@ -5,7 +5,7 @@ using System;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace Npgg.CsvLoader
+namespace Npgg
 {
     public class MemberAssigner
     {

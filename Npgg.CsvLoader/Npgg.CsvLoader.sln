@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Npgg.CsvLoader", "Npgg.CsvL
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Npgg.CsvLoader.Tests", "Npgg.CsvLoader.Tests\Npgg.CsvLoader.Tests.csproj", "{3C0AE7D2-DC12-4EE0-AAB8-3A8426216E7F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sampler", "Sampler\Sampler.csproj", "{AE774FCC-6D50-4065-822B-C71999307839}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{789B8147-63A0-43EF-8605-6467210EC467}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
@@ -28,10 +26,6 @@ Global
 		{3C0AE7D2-DC12-4EE0-AAB8-3A8426216E7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3C0AE7D2-DC12-4EE0-AAB8-3A8426216E7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3C0AE7D2-DC12-4EE0-AAB8-3A8426216E7F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AE774FCC-6D50-4065-822B-C71999307839}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AE774FCC-6D50-4065-822B-C71999307839}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AE774FCC-6D50-4065-822B-C71999307839}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AE774FCC-6D50-4065-822B-C71999307839}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

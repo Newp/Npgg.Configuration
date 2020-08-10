@@ -1,4 +1,4 @@
-using Npgg.CsvLoader;
+
 //using UnityEngine;
 using System;
 using System.Collections.Generic;
@@ -11,7 +11,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 
 
-namespace Npgg.CsvLoader
+namespace Npgg
 {
    
 
