@@ -48,7 +48,7 @@ namespace Npgg.CsvParser.Tests
 ";
             SimpleLoader loader = new SimpleLoader();
 
-            var loaded = loader.Load<CsvSample>(csv).Result;
+            var loaded = loader.Load<CsvSample>(csv);
 
             Assert.Equal(2, loaded.Count);
 
@@ -63,7 +63,7 @@ namespace Npgg.CsvParser.Tests
 
 
         [Fact]
-        public void Row주석테스트()
+        public void Row저쩌구()
         {
             string csv =
 @"Key,Value
@@ -73,7 +73,7 @@ namespace Npgg.CsvParser.Tests
 ";
             SimpleLoader loader = new SimpleLoader();
 
-            var loaded = loader.Load<CsvSample>(csv).Result;
+            var loaded = loader.Load<CsvSample>(csv);
 
             Assert.Equal(2, loaded.Count);
 
@@ -92,7 +92,7 @@ namespace Npgg.CsvParser.Tests
         }
 
         [Fact]
-        public void Column주석테스트()
+        public void Column어쩌구()
         {
             string csv =
 @"Key,#Value
@@ -101,7 +101,7 @@ namespace Npgg.CsvParser.Tests
 ";
             SimpleLoader loader = new SimpleLoader();
 
-            var loaded = loader.Load<CsvSample>(csv).Result;
+            var loaded = loader.Load<CsvSample>(csv);
 
             Assert.Equal(2, loaded.Count);
 

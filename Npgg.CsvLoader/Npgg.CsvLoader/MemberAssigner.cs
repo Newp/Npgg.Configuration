@@ -85,29 +85,9 @@ namespace Npgg.CsvLoader
         }
 
 
-        private void Init(
-            Type objectType,
-            Type valueType,
-            Func<Expression, MemberExpression> getMember,
-            Func<Expression, Expression, MethodCallExpression> makeCallExpression,
-            out Func<object, object> getter,
-            out Action<object, object> setter)
-        {
-            var exObjParam = Expression.Parameter(typeof(object), "theObject");
-            var exValParam = Expression.Parameter(typeof(object), "theProperty");
-
-            var exObjConverted = Expression.Convert(exObjParam, objectType);
-            var exValConverted = Expression.Convert(exValParam, ValueType);
-
-            Expression exMember = getMember(exObjConverted);
-
-            Expression getterMember = ValueType.IsValueType ? Expression.Convert(exMember, typeof(object)) : exMember;
-            getter = Expression.Lambda<Func<object, object>>(getterMember, exObjParam).Compile();
-
-            Expression exAssignment = makeCallExpression(exObjConverted, exValConverted);
-            setter = Expression.Lambda<Action<object, object>>(exAssignment, exObjParam, exValParam).Compile();
-        }
 
     }
+
+
 
 }

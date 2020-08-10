@@ -15,13 +15,13 @@ namespace Npgg.CsvLoader
         protected void SplitRow(string rowString) => regex.Split(rowString);
 
 
-        public async Task<List<T>> Load<T>(string tableString) where T : new()
+        public List<T> Load<T>(string tableString) where T : new()
         {
             var type = typeof(T);
             var result = new List<T>();
             using( StringReader reader = new StringReader(tableString))
             {
-                var columnString = await reader.ReadLineAsync();
+                var columnString = reader.ReadLine();
                 var columns = new List<string>(regex.Split(columnString));
 
                 var members = type.GetMembers()
@@ -36,6 +36,7 @@ namespace Npgg.CsvLoader
                     var columnName = columns[columnIndex];
 
                     if (columnName.StartsWith("#")
+                        || columnName.StartsWith("//")
                         || members.TryGetValue(columnName, out var memberInfo) == false)
                     {
                         continue;
@@ -48,11 +49,11 @@ namespace Npgg.CsvLoader
                 
                 while(true)
                 {
-                    var line = await reader.ReadLineAsync();
+                    var line = reader.ReadLine();
 
                     if (line == null) break;
 
-                    if (line.StartsWith("#")) continue; //주석
+                    if (line.StartsWith("#")) continue; //雅뚯눘苑?
 
                     var row = regex.Split(line);
                     T item = new T();
