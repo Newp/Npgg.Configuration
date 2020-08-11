@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -8,12 +7,14 @@ using System.Threading.Tasks;
 
 namespace Npgg
 {
-    public partial class CsvLoader
+
+	public partial class CsvLoader
     {
         const string _splitPattern = @",(?=(?:[^""]*""[^""]*"")*(?![^""]*""))";
         Regex regex = new Regex(_splitPattern);
         protected void SplitRow(string rowString) => regex.Split(rowString);
 
+        
 
         public List<T> Load<T>(string tableString) where T : new()
         {
@@ -24,13 +25,11 @@ namespace Npgg
                 var columnString = reader.ReadLine();
                 var columns = new List<string>(regex.Split(columnString));
 
-                var members = type.GetMembers()
-                    .Where(pi => pi.MemberType == MemberTypes.Field || pi.MemberType == MemberTypes.Property)
-                    .Where(pi => columns.Contains( pi.Name))
-                    .ToDictionary(member => member.Name);
+				var members = type.GetMembers()
+					.Where(propertyInfo => propertyInfo.MemberType == MemberTypes.Field || propertyInfo.MemberType == MemberTypes.Property)
+					.ToDictionary(mem => mem.GetCustomAttribute<CsvColumnAttribute>()?.ColumnName ?? mem.Name);
 
-
-                var binders = new List<BindInfo>();
+				var binders = new List<BindInfo>();
                 for (int columnIndex = 0; columnIndex < columns.Count; columnIndex++)
                 {
                     var columnName = columns[columnIndex];
@@ -53,7 +52,7 @@ namespace Npgg
 
                     if (line == null) break;
 
-                    if (line.StartsWith("#")) continue; //雅뚯눘苑?
+                    if (line.StartsWith("#")) continue; //?낅슣?섋땻?
 
                     var row = regex.Split(line);
                     T item = new T();
