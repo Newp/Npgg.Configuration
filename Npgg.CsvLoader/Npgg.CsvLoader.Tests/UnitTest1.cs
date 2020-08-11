@@ -3,14 +3,14 @@ using Xunit;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Reflection;
 
-namespace Npgg.CsvParser.Tests
+namespace Npgg.Tests
 {
     public class UnitTest1
     {
 
         CsvLoader loader = new CsvLoader();
-
         
 
         string MakeRow (params object[] values)=> string.Join(',', values);
@@ -56,7 +56,7 @@ namespace Npgg.CsvParser.Tests
 
 
         [Fact]
-        public void Row저쩌구()
+        public void RowTest()
         {
             string csv =
 @"Key,Value
@@ -84,7 +84,7 @@ namespace Npgg.CsvParser.Tests
         }
 
         [Fact]
-        public void Column어쩌구()
+        public void ColumnTest()//dㄹㄹㄹ
         {
             string csv =
 @"Key,#Value
@@ -108,8 +108,50 @@ namespace Npgg.CsvParser.Tests
         public class CsvSample
         {
             public int Key { get; set; }
-            public string Value;
-        }
+			public string Value;
+
+			[CsvColumn("camel_case")]
+			public string CamelCase;
+		}
+
+
+		[Fact]
+		public void AttributesTest()
+		{
+
+			var type = typeof(CsvSample);
+
+			var members = type.GetMembers();
+				//BindingFlags.GetField| BindingFlags.SetField| BindingFlags.SetProperty| BindingFlags.GetProperty| BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+
+			var ss = members.Select(mem => mem.Name).ToArray();
+
+			foreach (var mem in members)
+			{
+				var xx = mem.GetCustomAttribute<CsvColumnAttribute>()?.ColumnName ?? mem.Name;
+			}
+
+
+			//
+
+
+			string csv =
+@"Key,#Value,camel_case
+0,Value0,ok
+1,Value1,ok
+";
+
+			var loaded = loader.Load<CsvSample>(csv);
+
+			Assert.Equal(2, loaded.Count);
+
+			foreach(var item in loaded)
+			{
+				Assert.Equal("ok", item.CamelCase);
+			}
+				
+
+		}
     }
 
     

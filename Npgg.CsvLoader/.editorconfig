@@ -1,6 +1,6 @@
 # All files
 [*]
-indent_style = space
+indent_style = tab
 charset = utf-8
 
 indent_size = 4
