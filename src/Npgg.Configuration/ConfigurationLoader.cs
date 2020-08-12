@@ -54,7 +54,7 @@ namespace Npgg.Configuration
 
 				var members = type.GetMembers()
 					.Where(propertyInfo => propertyInfo.MemberType == MemberTypes.Field || propertyInfo.MemberType == MemberTypes.Property)
-					.ToDictionary(mem => mem.GetCustomAttribute<CsvColumnAttribute>()?.ColumnName ?? mem.Name);
+					.ToDictionary(mem => mem.GetCustomAttribute<ConfigColumnAttribute>()?.ColumnName ?? mem.Name);
 
 				var binders = new List<BindInfo>();
 				for (int columnIndex = 0; columnIndex < columns.Count; columnIndex++)
@@ -79,7 +79,7 @@ namespace Npgg.Configuration
 
 					if (rowString == null) break;
 
-					if (rowString.StartsWith("#") || rowString.StartsWith("//")) continue; //???녿뮝???ル튉?
+					if (rowString.StartsWith("#") || rowString.StartsWith("//")) continue; //???�뒩???�빝?
 
 
 					var row = this.Split(rowString);
