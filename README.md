@@ -12,11 +12,11 @@
 ## Example
 1.deserialize 할 클래스를 생성한다.
 ```csharp
-    public class CsvSample
-    {
-        public int Key { get; set; }
-        public string Value;
-    }
+public class CsvSample
+{
+	public int Key { get; set; }
+	public string Value;
+}
 ```
 
 2.csv(또는 tsv) 를 작성하고 string 객체로 read 한다. ( local file, unity TextAsset, CDN download 등 )
@@ -29,17 +29,17 @@ Key,Value
 
 3. Load 한다.
 ```csharp
-    public void OnLoad(string tableString)
-    {
-          SimpleLoader loader = new SimpleLoader();
+public void OnLoad(string tableString)
+{
+	SimpleLoader loader = new SimpleLoader();
 
-          var loaded =loader.Load<CsvSample>(tableString).Result;
-          
-          //loaded 에는 아래와 같은 아이템들이 들어있다
-          // [0] new CsvSample(){ Key=1, Value="Value1"};
-          // [1] new CsvSample(){ Key=2, Value="Value2"};
-          // [2] new CsvSample(){ Key=2, Value="Value3"};
-    }
+	var loaded =loader.Load<CsvSample>(tableString).Result;
+
+	//loaded 에는 아래와 같은 아이템들이 들어있다
+	// [0] new CsvSample(){ Key=1, Value="Value1"};
+	// [1] new CsvSample(){ Key=2, Value="Value2"};
+	// [2] new CsvSample(){ Key=2, Value="Value3"};
+}
 ```
 
 
@@ -73,60 +73,61 @@ Key,Values1,Values2
 
 csv에서 row로 사용할 클래스를 선언하고 CustomConverter<T> 를 상속하여 Convert 함수를 정의해줍니다.
 ```csharp
-		class Vector3
-		{
-			public float X, Y, Z;
-		}
+class Vector3
+{
+	public float X, Y, Z;
+}
 
-		class Vector3Converter : CustomConverter<Vector3>
-		{
-			public override Vector3 Convert(string value) //input (1,2,3)
-			{
-				var splited = value.Split(',')
-					.Select(d => d.Trim('(', ')')) // array["1", "2", "3"]
-					.Select(d => float.Parse(d)).ToArray(); // array[1, 2, 3]
+class Vector3Converter : CustomConverter<Vector3>
+{
+	public override Vector3 Convert(string value) //input (1,2,3)
+	{
+		var splited = value.Split(',')
+			.Select(d => d.Trim('(', ')')) // array["1", "2", "3"]
+			.Select(d => float.Parse(d)).ToArray(); // array[1, 2, 3]
 
-				return new Vector3() { X = splited[0], Y = splited[1], Z = splited[2] };
-			
-			}
-		}
+		return new Vector3() { X = splited[0], Y = splited[1], Z = splited[2] };
+	}
+}
 ```
 
 이제 클래스 선언, table string 선언, load 3단계로 마무리 됩니다.
+
+csvString
+```
+Key,Vector3
+1,"(1,2,3)"
+```
 ```csharp
 
-		class Vector3Row
-		{
-			public int Key { get; set; }
-		
-			public Vector3 Vector3 { get; set; }
-		}
-        
-		[Fact]
-		public void CustomConverterTest()
-		{
-                
-			var csvString = @"Key,Vector3
-1,""(1,2,3)""
-";
+class Vector3Row
+{
+	public int Key { get; set; }
 
-            //CustomConverter<T>.RegistConverter 함수를 활용하여 Custom Converter를 등록합니다.
-			CustomConverter<Vector3>.RegistConverter<Vector3Converter>();
+	public Vector3 Vector3 { get; set; }
+}
 
-			CsvLoader loader = new CsvLoader();
+[Fact]
+public void CustomConverterTest()
+{
 
-            //Load !
-			var list = loader.Load<Vector3Row>(csvString);
+	//CustomConverter<T>.RegistConverter 함수를 활용하여 Custom Converter를 등록합니다.
+	CustomConverter<Vector3>.RegistConverter<Vector3Converter>();
 
-			Assert.Single(list);
+	CsvLoader loader = new CsvLoader();
 
-			var item = list.FirstOrDefault();
-			Assert.NotNull(item);
-			Assert.Equal(1, item.Key);
-			Assert.Equal(1, item.Vector3.X);
-			Assert.Equal(2, item.Vector3.Y);
-			Assert.Equal(3, item.Vector3.Z);
-		}
+	//Load !
+	var list = loader.Load<Vector3Row>(csvString);
+
+	Assert.Single(list);
+
+	var item = list.FirstOrDefault();
+	Assert.NotNull(item);
+	Assert.Equal(1, item.Key);
+	Assert.Equal(1, item.Vector3.X);
+	Assert.Equal(2, item.Vector3.Y);
+	Assert.Equal(3, item.Vector3.Z);
+}
 
 ```
 ### 주석의 활용
@@ -168,13 +169,13 @@ key,value
 ```
 
 ```csharp
-    public class CsvSample
-    {
-        [ConfigColumn("key")]
-        public int Key { get; set; }
-        
-        [ConfigColumn("value")]
-        public string Value;
-    }
+public class CsvSample
+{
+	[ConfigColumn("key")]
+	public int Key { get; set; }
+
+	[ConfigColumn("value")]
+	public string Value;
+}
 
 ```
