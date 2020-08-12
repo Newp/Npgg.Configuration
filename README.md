@@ -18,6 +18,7 @@
         public string Value;
     }
 ```
+
 2.csv(또는 tsv) 를 작성하고 string 객체로 read 한다. ( local file, unity TextAsset, CDN download 등 )
 ```
 Key,Value
@@ -25,6 +26,7 @@ Key,Value
 2,Value2
 3,Value3
 ```
+
 3. Load 한다.
 ```csharp
     public void OnLoad(string tableString)
@@ -41,6 +43,92 @@ Key,Value
 ```
 
 
+
+### List<T>, T[] 활용
+필드안에서 쉼표(,)로 구분하며, CSV의 경우 필드를 따옴표(")로 감싸줍니다.
+
+```csharp
+public class ListArraySample<T>
+{
+	public int Key { get; set; }
+	public List<T> Values1 { get; set; }
+	public T[] Values2 { get; set; }
+}       
+```
+    
+csv, 따옴표로 묶어야 합니다.
+```
+Key,Values1,Values2
+1,"1,2,3","4,5,6"
+2,"1,2,3","4,5,6"
+``` 
+tsv, 따옴표로 묶어도 되고 안묶어도 됩니다.
+```
+Key,Values1,Values2
+1       1,2,3     "4,5,6"
+2       "1,2,3"     "4,5,6"
+```
+    
+### CustomConverter 활용
+
+csv에서 row로 사용할 클래스를 선언하고 CustomConverter<T> 를 상속하여 Convert 함수를 정의해줍니다.
+```csharp
+		class Vector3
+		{
+			public float X, Y, Z;
+		}
+
+		class Vector3Converter : CustomConverter<Vector3>
+		{
+			public override Vector3 Convert(string value) //input (1,2,3)
+			{
+				var splited = value.Split(',')
+					.Select(d => d.Trim('(', ')')) // array["1", "2", "3"]
+					.Select(d => float.Parse(d)).ToArray(); // array[1, 2, 3]
+
+				return new Vector3() { X = splited[0], Y = splited[1], Z = splited[2] };
+			
+			}
+		}
+```
+
+이제 클래스 선언, table string 선언, load 3단계로 마무리 됩니다.
+```csharp
+
+		class Vector3Row
+		{
+			public int Key { get; set; }
+		
+			public Vector3 Vector3 { get; set; }
+		}
+        
+		[Fact]
+		public void CustomConverterTest()
+		{
+                
+			var csvString = @"Key,Vector3
+1,""(1,2,3)""
+";
+
+            //CustomConverter<T>.RegistConverter 함수를 활용하여 Custom Converter를 등록합니다.
+			CustomConverter<Vector3>.RegistConverter<Vector3Converter>();
+
+			CsvLoader loader = new CsvLoader();
+
+            //Load !
+			var list = loader.Load<Vector3Row>(csvString);
+
+			Assert.Single(list);
+
+			var item = list.FirstOrDefault();
+			Assert.NotNull(item);
+			Assert.Equal(1, item.Key);
+			Assert.Equal(1, item.Vector3.X);
+			Assert.Equal(2, item.Vector3.Y);
+			Assert.Equal(3, item.Vector3.Z);
+		}
+
+```
 ### 주석의 활용
 column이나 가장앞열에 // 또는 # 을 통하여 주석처리할 수 있습니다.
 
@@ -51,6 +139,9 @@ Key,//Value
 2,Value2
 3,Value3
 ```
+
+
+
 
 
 
