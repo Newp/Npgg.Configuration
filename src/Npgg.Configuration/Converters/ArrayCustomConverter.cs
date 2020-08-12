@@ -2,7 +2,7 @@ using System;
 using System.ComponentModel;
 using System.Globalization;
 
-namespace Npgg
+namespace Npgg.Configuration
 {
     public class ArrayCustomConverter : StringConverter
     {

@@ -5,7 +5,7 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Collections;
 
-namespace Npgg
+namespace Npgg.Configuration
 {
     public class ListCustomConverter : StringConverter
     {

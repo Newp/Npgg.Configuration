@@ -5,7 +5,8 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Copyright></Copyright>
     <Description>Csv string to c# object deserializer</Description>
-    <PackageProjectUrl>https://github.com/Newp/Npgg.CsvLoader</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/Newp/Npgg.Configuration</PackageProjectUrl>
+    <AssemblyVersion>1.1.0.0</AssemblyVersion>
   </PropertyGroup>
 
 </Project>

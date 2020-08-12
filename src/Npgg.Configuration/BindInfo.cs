@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reflection;
 
-namespace Npgg
+namespace Npgg.Configuration
 {
    
     public class BindInfo

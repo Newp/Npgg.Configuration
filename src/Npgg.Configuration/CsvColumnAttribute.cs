@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 
-namespace Npgg
+namespace Npgg.Configuration
 {
 	public class CsvColumnAttribute : Attribute
     {

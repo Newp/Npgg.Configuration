@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Reflection;
+using Npgg.Configuration;
 
 namespace Npgg.Tests
 {
@@ -84,7 +85,7 @@ namespace Npgg.Tests
         }
 
         [Fact]
-        public void ColumnTest()//d?�ㄹ??
+        public void ColumnTest()//d?밤꽮??
         {
             string csv =
 @"Key,#Value

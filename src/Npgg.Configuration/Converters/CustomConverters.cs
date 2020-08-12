@@ -11,7 +11,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 
 
-namespace Npgg
+namespace Npgg.Configuration
 {
    
 

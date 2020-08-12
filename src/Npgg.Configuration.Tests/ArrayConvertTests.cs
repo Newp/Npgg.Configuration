@@ -1,3 +1,4 @@
+using Npgg.Configuration;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -49,9 +50,11 @@ namespace Npgg.Tests
 		public void TsvTest()
 		{
 			string pattern = "\t(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)";
-			Regex regex = new Regex(pattern);
+			TsvLoader tsv = new TsvLoader();
 
-			var sss = regex.Split("a	\"b1	b2\"	c");
+			string input = "a	\"b1	b2\"	c";
+			var ss2 = Regex.Split(input, pattern);
+			var sss = tsv.Split(input);
 
 			Assert.Equal(3, sss.Length);
 		}
