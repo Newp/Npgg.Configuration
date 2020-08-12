@@ -7,8 +7,6 @@
 - TypeDescriptor 에 등록하여 CustomType Convert 가 가능합니다.
 
 
-///
-
 ## Example
 1.deserialize 할 클래스를 생성한다.
 ```csharp
@@ -43,8 +41,24 @@ public void OnLoad(string tableString)
 ```
 
 
+## Install Package
 
-### List<T>, T[] 활용
+Nuget Package Manager
+```powershell
+PM> Install-Package Npgg.Configuration -Version 1.2.0
+```
+Dotnet CLI
+```powershell
+>dotnet add package Npgg.Configuration --version 1.2.0
+```
+
+Package Reference
+```xml
+<PackageReference Include="Npgg.Configuration" Version="1.2.0" />
+```
+***
+
+## List<T>, T[] 활용
 필드안에서 쉼표(,)로 구분하며, CSV의 경우 필드를 따옴표(")로 감싸줍니다.
 
 ```csharp
@@ -69,7 +83,7 @@ Key,Values1,Values2
 2       "1,2,3"     "4,5,6"
 ```
     
-### CustomConverter 활용
+## CustomConverter 활용
 
 csv에서 row로 사용할 클래스를 선언하고 CustomConverter<T> 를 상속하여 Convert 함수를 정의해줍니다.
 ```csharp
