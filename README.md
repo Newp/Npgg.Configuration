@@ -1,16 +1,16 @@
-# Npgg.CsvSerializer
-CSV to C# object Serializer
+# Npgg.Configuration
 
-진행중인 프로젝트 입니다.
-
-1. 기존에 지원하던 List, Array 를 임시로 제외하였습니다.
-2. string load 를 상속받아야 하던 기능을 임시로 제외하였습니다
-3. async/await 을 지원하나 이후 퍼포먼스 테스트를 통하여 변경될 수 있습니다.
+## 기능
+- CSV, TSV String 을 C# object list로 변환해줍니다.
+- 기본타입 (int, string, float...) 을 지원합니다.
+- 열거형( List<T>, T[] ) 타입을 지원합니다. 단, 이때 따옴표(")로 값을 감싸줘야 합니다. (ex: "1,2,3")
+- TypeDescriptor 에 등록하여 CustomType Convert 가 가능합니다.
 
 
 ///
 
-csv를 활용할 class 를 선언한다
+## Example
+1.deserialize 할 클래스를 생성한다.
 ```csharp
     public class CsvSample
     {
@@ -18,22 +18,20 @@ csv를 활용할 class 를 선언한다
         public string Value;
     }
 ```
-
-csv 를 작성한다
+2.csv(또는 tsv) 를 작성하고 string 객체로 read 한다. ( local file, unity TextAsset, CDN download 등 )
 ```
 Key,Value
 1,Value1
 2,Value2
 3,Value3
 ```
-
-Load 한다.
+3. Load 한다.
 ```csharp
-    public void OnLoad(string csv)
+    public void OnLoad(string tableString)
     {
           SimpleLoader loader = new SimpleLoader();
 
-          var loaded =loader.Load<CsvSample>(csv).Result;
+          var loaded =loader.Load<CsvSample>(tableString).Result;
           
           //loaded 에는 아래와 같은 아이템들이 들어있다
           // [0] new CsvSample(){ Key=1, Value="Value1"};
@@ -42,3 +40,50 @@ Load 한다.
     }
 ```
 
+
+### 주석의 활용
+column이나 가장앞열에 // 또는 # 을 통하여 주석처리할 수 있습니다.
+
+아래 경우에는 모든 Value column (Value1,Value2,Value3)값을 무시합니다.
+```csv//
+Key,//Value
+1,Value1
+2,Value2
+3,Value3
+```
+
+
+
+아래 경우에는 Key=2 인 row 를 무시합니다
+```csv//
+Key,//Value
+1,Value1
+//2,Value2
+3,Value3
+```
+
+
+
+### Attribute 활용
+만약 naming convention 등의 이유로 필드 이름과 테이블컬럼 이름을 동일하게 맞출 수 없다면 
+ConfigColumnAttribute를 활용하여 이를 맞출 수 있습니다.
+
+
+```csv
+key,value
+1,Value1
+2,Value2
+3,Value3
+```
+
+```csharp
+    public class CsvSample
+    {
+        [ConfigColumn("key")]
+        public int Key { get; set; }
+        
+        [ConfigColumn("value")]
+        public string Value;
+    }
+
+```
