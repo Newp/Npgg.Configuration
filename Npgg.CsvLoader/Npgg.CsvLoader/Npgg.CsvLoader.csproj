@@ -3,7 +3,9 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Copyright>CPOL</Copyright>
+    <Copyright></Copyright>
+    <Description>Csv string to c# object deserializer</Description>
+    <PackageProjectUrl>https://github.com/Newp/Npgg.CsvLoader</PackageProjectUrl>
   </PropertyGroup>
 
 </Project>

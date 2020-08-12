@@ -5,42 +5,41 @@ using System.Reflection;
 
 namespace Npgg
 {
-    public partial class CsvLoader
+   
+    public class BindInfo
     {
-        public class BindInfo
+        public string ColumnName { get; set; }
+        public int RawIndex { get; set; }
+        public MemberAssigner Assigner { get; set; }
+        public TypeConverter Converter { get; set; }
+
+        public BindInfo(string columnName, int rawIndex, MemberInfo memberInfo)
         {
-            public string ColumnName { get; set; }
-            public int RawIndex { get; set; }
-            public MemberAssigner Assigner { get; set; }
-            public TypeConverter Converter { get; set; }
+            this.ColumnName = columnName;
+            this.RawIndex = rawIndex;
+            this.Assigner = new MemberAssigner(memberInfo);
 
-            public BindInfo(string columnName, int rawIndex, MemberInfo memberInfo)
+            if (Assigner.ValueType.IsGenericType)
             {
-                this.ColumnName = columnName;
-                this.RawIndex = rawIndex;
-                this.Assigner = new MemberAssigner(memberInfo);
+                Type listType = Assigner.ValueType.GetGenericTypeDefinition();
+                Type[] argTypes = Assigner.ValueType.GetGenericArguments();
 
-                if (Assigner.ValueType.IsGenericType)
+                if (listType == typeof(List<>))
                 {
-                    Type listType = Assigner.ValueType.GetGenericTypeDefinition();
-                    Type[] argTypes = Assigner.ValueType.GetGenericArguments();
+                    this.Converter = new ListCustomConverter(listType.MakeGenericType(argTypes[0]), argTypes[0]);
+                }
+            }
+            else if (Assigner.ValueType.IsArray)
+            {
 
-                    if (listType == typeof(List<>))
-                    {
-                        this.Converter = new ListCustomConverter(listType.MakeGenericType(argTypes[0]), argTypes[0]);
-                    }
-                }
-                else if (Assigner.ValueType.IsArray)
-                {
-
-                    this.Converter = new ArrayCustomConverter(Assigner.ValueType.GetElementType());
-                    //.MakeArrayType()
-                }
-                else
-                {
-                    this.Converter = TypeDescriptor.GetConverter(this.Assigner.ValueType);
-                }
+                this.Converter = new ArrayCustomConverter(Assigner.ValueType.GetElementType());
+                //.MakeArrayType()
+            }
+            else
+            {
+                this.Converter = TypeDescriptor.GetConverter(this.Assigner.ValueType);
             }
         }
     }
+    
 }

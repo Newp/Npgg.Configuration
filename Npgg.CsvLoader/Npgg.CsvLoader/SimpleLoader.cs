@@ -8,12 +8,17 @@ using System.Threading.Tasks;
 namespace Npgg
 {
 
-	public partial class CsvLoader
+	public class CsvLoader
     {
         const string _splitPattern = @",(?=(?:[^""]*""[^""]*"")*(?![^""]*""))";
         Regex regex = new Regex(_splitPattern);
-        protected void SplitRow(string rowString) => regex.Split(rowString);
 
+		public string[] Split(string rowString)
+		{
+			var row = regex.Split(rowString);
+			return row.Select(cell => cell.Trim(' ', '"')).ToArray();
+
+		}
         
 
         public List<T> Load<T>(string tableString) where T : new()
@@ -23,7 +28,7 @@ namespace Npgg
             using( StringReader reader = new StringReader(tableString))
             {
                 var columnString = reader.ReadLine();
-                var columns = new List<string>(regex.Split(columnString));
+                var columns = new List<string>( this.Split(columnString));
 
 				var members = type.GetMembers()
 					.Where(propertyInfo => propertyInfo.MemberType == MemberTypes.Field || propertyInfo.MemberType == MemberTypes.Property)
@@ -48,21 +53,22 @@ namespace Npgg
                 
                 while(true)
                 {
-                    var line = reader.ReadLine();
+                    var rowString = reader.ReadLine();
 
-                    if (line == null) break;
+                    if (rowString == null) break;
 
-                    if (line.StartsWith("#")) continue; //?낅슣?섋땻?
+                    if (rowString.StartsWith("#") || rowString.StartsWith("//")) continue; //??낆뒩??뗫빝?
 
-                    var row = regex.Split(line);
-                    T item = new T();
+
+					var row = this.Split(rowString);
+					T item = new T();
 
                     foreach (var binder in binders)
                     {
-                        var rawValue = row[binder.RawIndex];
-                        var converted = binder.Converter.ConvertFromString(rawValue);
+                        var cellValue = row[binder.RawIndex];
+                        var convertedCellValue = binder.Converter.ConvertFromString(cellValue);
 
-                        binder.Assigner.SetValue(item, converted);
+                        binder.Assigner.SetValue(item, convertedCellValue);
                     }
 
                     result.Add(item);
