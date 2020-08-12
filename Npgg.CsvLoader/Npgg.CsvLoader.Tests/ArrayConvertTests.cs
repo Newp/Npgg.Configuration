@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -12,8 +13,8 @@ namespace Npgg.Tests
     {
         readonly CsvLoader loader = new CsvLoader();
 
-        string csv = @"Key,Values,Tag
-1,""1,2,3,4,5"",tag";
+        string csv = @"Key ,Values ,Tag
+1,""1,2,3,4,5"",tag ";
         [Fact]
         public void StringListTest()
         {
@@ -43,6 +44,17 @@ namespace Npgg.Tests
             Assert.Equal(5, item.Values.Length);
             Assert.Equal("tag", item.Tag);
         }
+
+		[Fact]
+		public void TsvTest()
+		{
+			string pattern = "\t(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)";
+			Regex regex = new Regex(pattern);
+
+			var sss = regex.Split("a	\"b1	b2\"	c");
+
+			Assert.Equal(3, sss.Length);
+		}
 
 
         [Fact]

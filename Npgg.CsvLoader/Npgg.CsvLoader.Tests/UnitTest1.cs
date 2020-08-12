@@ -84,7 +84,7 @@ namespace Npgg.Tests
         }
 
         [Fact]
-        public void ColumnTest()//dㄹㄹㄹ
+        public void ColumnTest()//d?�ㄹ??
         {
             string csv =
 @"Key,#Value
