@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -16,7 +17,6 @@ namespace Npgg.Configuration
 
 		}
 	}
-
 	public class TsvLoader : ConfigurationLoader
 	{
 
@@ -27,6 +27,8 @@ namespace Npgg.Configuration
 
 		}
 	}
+
+	
 
 	public abstract class ConfigurationLoader
 	{
@@ -43,6 +45,8 @@ namespace Npgg.Configuration
 			return row.Select(cell => cell.Trim(' ', '"')).ToArray();
 		}
 
+		
+
 		public List<T> Load<T>(string tableString) where T : new()
 		{
 			var type = typeof(T);
@@ -54,7 +58,8 @@ namespace Npgg.Configuration
 
 				var members = type.GetMembers()
 					.Where(propertyInfo => propertyInfo.MemberType == MemberTypes.Field || propertyInfo.MemberType == MemberTypes.Property)
-					.ToDictionary(mem => mem.GetCustomAttribute<ConfigColumnAttribute>()?.ColumnName ?? mem.Name);
+					.Select(memberInfo => new MappingInfo(memberInfo))
+					.ToDictionary(mappingInfo => mappingInfo.ColumnName);
 
 				var binders = new List<BindInfo>();
 				for (int columnIndex = 0; columnIndex < columns.Count; columnIndex++)
@@ -63,34 +68,51 @@ namespace Npgg.Configuration
 
 					if (columnName.StartsWith("#")
 						|| columnName.StartsWith("//")
-						|| members.TryGetValue(columnName, out var memberInfo) == false)
+						|| members.TryGetValue(columnName, out var mappingInfo) == false)
 					{
 						continue;
 					}
 
-					binders.Add(new BindInfo(columnName, columnIndex, memberInfo));
+					binders.Add(new BindInfo(columnName, columnIndex, mappingInfo.MemberInfo));
+				}
+
+				foreach(var member in members.Values)
+				{
+					if (member.Required == true
+						&& binders.Where(binder => binder.ColumnName == member.ColumnName).Count() == 0)
+						throw new RequiredColumnNotFoundException(member.ColumnName);
 				}
 
 				// max length check passed
 
+				int lineNumber = 0;
 				while (true)
 				{
 					var rowString = reader.ReadLine();
+					lineNumber++;
 
 					if (rowString == null) break;
 
-					if (rowString.StartsWith("#") || rowString.StartsWith("//")) continue; //???�뒩???�빝?
+					if (rowString.StartsWith("#") || rowString.StartsWith("//")) continue; //????용츧????ロ뒌?
 
 
-					var row = this.Split(rowString);
+					var rowNumber = this.Split(rowString);
 					T item = new T();
 
 					foreach (var binder in binders)
 					{
-						var cellValue = row[binder.RawIndex];
-						var convertedCellValue = binder.Converter.ConvertFromString(cellValue);
+						var cellValue = rowNumber[binder.RawIndex];
 
-						binder.Assigner.SetValue(item, convertedCellValue);
+						try
+						{
+							var convertedCellValue = binder.Converter.ConvertFromString(cellValue);
+							binder.Assigner.SetValue(item, convertedCellValue);
+						}
+						catch (Exception ex)
+						{
+							throw new ConvertException(binder.ColumnName, cellValue, lineNumber, ex);
+						}
+
 					}
 
 					result.Add(item);
@@ -103,5 +125,30 @@ namespace Npgg.Configuration
 		}
 
 
+	}
+
+	public class ConvertException : Exception
+	{
+		public ConvertException(string columnName , string textValue, int lineNumber, Exception exception) : 
+			base($"convert error => column:{columnName}, text:{textValue}, line:{lineNumber}", exception)
+		{
+			ColumnName = columnName;
+			TextValue = textValue;
+			LineNumber = lineNumber;
+		}
+
+		public string ColumnName { get; }
+		public string TextValue { get; }
+		public int LineNumber { get; }
+	}
+
+	public class RequiredColumnNotFoundException : Exception
+	{
+		public RequiredColumnNotFoundException(string columnName)
+		{
+			ColumnName = columnName;
+		}
+
+		public string ColumnName { get; }
 	}
 }
