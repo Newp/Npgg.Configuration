@@ -45,16 +45,16 @@ public void OnLoad(string tableString)
 
 Nuget Package Manager
 ```powershell
-PM> Install-Package Npgg.Configuration -Version 1.2.0
+PM> Install-Package Npgg.Configuration -Version 1.3.0
 ```
 Dotnet CLI
 ```powershell
->dotnet add package Npgg.Configuration --version 1.2.0
+>dotnet add package Npgg.Configuration --version 1.3.0
 ```
 
 Package Reference
 ```xml
-<PackageReference Include="Npgg.Configuration" Version="1.2.0" />
+<PackageReference Include="Npgg.Configuration" Version="1.3.0" />
 ```
 ***
 
@@ -82,7 +82,36 @@ Key,Values1,Values2
 1       1,2,3     "4,5,6"
 2       "1,2,3"     "4,5,6"
 ```
-    
+
+
+
+### Attribute 활용
+만약 naming convention 등의 이유로 필드 이름과 테이블컬럼 이름을 동일하게 맞출 수 없다면 ConfigColumnAttribute를 활용하여 이를 맞출 수 있습니다.
+ConfigColumnAttribute가 설정될 경우 기본적으로 Required=true가 됩니다.
+(만약, 이름을 바꾸고 Required=false 로 하고싶다면 [ConfigColum("name", false)] 로 지정합니다.)
+Required 가 true 임에도 table string에 column 이 존재하지 않는다면 RequiredColumnNotFoundException 이 발생합니다.
+
+```csv
+key,value
+1,Value1
+2,Value2
+3,Value3
+```
+
+```csharp
+public class CsvSample
+{
+	[ConfigColumn("key")] // default Required value is true
+	public int Key { get; set; }
+
+	[ConfigColumn("value", false)] // required = false
+	public string Value;
+}
+
+```
+
+
+
 ## CustomConverter 활용
 
 csv에서 row로 사용할 클래스를 선언하고 CustomConverter<T> 를 상속하여 Convert 함수를 정의해줍니다.
@@ -156,10 +185,6 @@ Key,//Value
 ```
 
 
-
-
-
-
 아래 경우에는 Key=2 인 row 를 무시합니다
 ```csv//
 Key,//Value
@@ -169,27 +194,14 @@ Key,//Value
 ```
 
 
-
-### Attribute 활용
-만약 naming convention 등의 이유로 필드 이름과 테이블컬럼 이름을 동일하게 맞출 수 없다면 
-ConfigColumnAttribute를 활용하여 이를 맞출 수 있습니다.
-
-
-```csv
-key,value
-1,Value1
-2,Value2
-3,Value3
-```
-
+### Convert Error TroubleShooting
+만약 필드값(cell value)가 타입과 일치하지 않아 오류가 발생할 경우 ConvertException 이 발생합니다.
+제공된 property value들을 통하여 load에서 발생하는 장애를 빠르게 해결하세요.
 ```csharp
-public class CsvSample
+public class ConvertException : Exception
 {
-	[ConfigColumn("key")]
-	public int Key { get; set; }
-
-	[ConfigColumn("value")]
-	public string Value;
+	public string ColumnName { get; }
+	public string TextValue { get; }
+	public int LineNumber { get; }
 }
-
 ```
