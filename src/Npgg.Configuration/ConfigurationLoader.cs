@@ -93,7 +93,7 @@ namespace Npgg.Configuration
 
 					if (rowString == null) break;
 
-					if (rowString.StartsWith("#") || rowString.StartsWith("//")) continue; //????용츧????ロ뒌?
+					if (rowString.StartsWith("#") || rowString.StartsWith("//")) continue; //?????⑹름??????뭽?
 
 
 					var rowNumber = this.Split(rowString);
@@ -125,30 +125,5 @@ namespace Npgg.Configuration
 		}
 
 
-	}
-
-	public class ConvertException : Exception
-	{
-		public ConvertException(string columnName , string textValue, int lineNumber, Exception exception) : 
-			base($"convert error => column:{columnName}, text:{textValue}, line:{lineNumber}", exception)
-		{
-			ColumnName = columnName;
-			TextValue = textValue;
-			LineNumber = lineNumber;
-		}
-
-		public string ColumnName { get; }
-		public string TextValue { get; }
-		public int LineNumber { get; }
-	}
-
-	public class RequiredColumnNotFoundException : Exception
-	{
-		public RequiredColumnNotFoundException(string columnName)
-		{
-			ColumnName = columnName;
-		}
-
-		public string ColumnName { get; }
 	}
 }

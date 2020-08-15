@@ -19,34 +19,16 @@ namespace Npgg.Tests
 		[Fact]
 		public void AttributesTest()
 		{
-
-			var type = typeof(AttributeTestObject);
-
-			var members = type.GetMembers();
-				//BindingFlags.GetField| BindingFlags.SetField| BindingFlags.SetProperty| BindingFlags.GetProperty| BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-
-			var ss = members.Select(mem => mem.Name).ToArray();
-
-			foreach (var mem in members)
-			{
-				var xx = mem.GetCustomAttribute<ConfigColumnAttribute>()?.ColumnName ?? mem.Name;
-			}
-
-
-			//
-
-
 			string csv =
 @"Key,camel_case
 0,ok
 1,ok
 ";
-
 			var loaded = loader.Load<AttributeTestObject>(csv);
 
 			Assert.Equal(2, loaded.Count);
 
-			foreach(var item in loaded)
+			foreach (var item in loaded)
 			{
 				Assert.Equal("ok", item.CamelCase);
 			}
@@ -54,7 +36,17 @@ namespace Npgg.Tests
 		}
 
 		[Fact]
-		public void RequiredTest()
+		public void RequiredTest2()
+		{
+			string csv =@"jjjKey";
+
+			var ex = Assert.Throws<RequiredColumnNotFoundException>(() => loader.Load<AttributeTestObject>(csv));
+
+			Assert.Contains(nameof(AttributeTestObject.Key), ex.Message);
+		}
+
+		[Fact]
+		public void RequiredTest1()
 		{
 
 			string csv =
@@ -63,7 +55,9 @@ namespace Npgg.Tests
 1,ok
 ";
 
-			Assert.Throws<RequiredColumnNotFoundException>(()=>loader.Load<AttributeTestObject>(csv));
+			var ex = Assert.Throws<RequiredColumnNotFoundException>(()=>loader.Load<AttributeTestObject>(csv));
+
+			Assert.Contains("camel_case", ex.Message);
 				
 			//Assert.Throws();
 			

@@ -127,6 +127,8 @@ bbbb,Value1
 
 			var exception = Assert.Throws<ConvertException>(() => loader.Load<SampleObject>(csv));
 
+			Assert.Contains("bbbb", exception.Message);
+
 			Assert.Equal(nameof(SampleObject.Key), exception.ColumnName);
 			Assert.Equal(2, exception.LineNumber);
 			Assert.Equal("bbbb", exception.TextValue);
