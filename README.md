@@ -41,23 +41,6 @@ public void OnLoad(string tableString)
 ```
 
 
-## Install Package
-
-Nuget Package Manager
-```powershell
-PM> Install-Package Npgg.Configuration -Version 1.3.0
-```
-Dotnet CLI
-```powershell
->dotnet add package Npgg.Configuration --version 1.3.0
-```
-
-Package Reference
-```xml
-<PackageReference Include="Npgg.Configuration" Version="1.3.0" />
-```
-***
-
 ## List<T>, T[] 활용
 필드안에서 쉼표(,)로 구분하며, CSV의 경우 필드를 따옴표(")로 감싸줍니다.
 
