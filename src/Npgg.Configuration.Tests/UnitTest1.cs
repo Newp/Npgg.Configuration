@@ -16,6 +16,7 @@ namespace Npgg.Tests
 		{
 			public int Key { get; set; }
 			public string Value;
+			public string Value2;
 		}
 
 		string MakeRow(params object[] values) => string.Join(',', values);
@@ -133,6 +134,35 @@ bbbb,Value1
 			Assert.Equal(2, exception.LineNumber);
 			Assert.Equal("bbbb", exception.TextValue);
 
+		}
+
+
+		[Fact]
+		public void TailingTest()
+		{
+			string csv =
+@"Key,Value,
+1,Value1,,
+#2,Value2,,
+2,Value2,,
+";
+
+			var loaded = loader.Load<SampleObject>(csv);
+
+			Assert.Equal(2, loaded.Count);
+
+			{
+				var item = loaded.First();
+
+				Assert.Equal(1, item.Key);
+				Assert.Equal("Value1", item.Value);
+			}
+			{
+				var item = loaded.Last();
+
+				Assert.Equal(2, item.Key);
+				Assert.Equal("Value2", item.Value);
+			}
 		}
 	}
 
