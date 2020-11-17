@@ -21,25 +21,33 @@ namespace Npgg.Configuration
 
             if (Assigner.ValueType.IsGenericType)
             {
-                Type listType = Assigner.ValueType.GetGenericTypeDefinition();
+                Type genericType = Assigner.ValueType.GetGenericTypeDefinition();
                 Type[] argTypes = Assigner.ValueType.GetGenericArguments();
 
-                if (listType == typeof(List<>))
+                if (genericType == typeof(List<>))
                 {
-                    this.Converter = new ListCustomConverter(listType.MakeGenericType(argTypes[0]), argTypes[0]);
+                    this.Converter = new ListCustomConverter(genericType.MakeGenericType(argTypes[0]), argTypes[0]);
                 }
+				else if (genericType == typeof(Nullable<>))
+				{
+					this.Converter = TypeDescriptor.GetConverter(this.Assigner.ValueType);
+				}
             }
             else if (Assigner.ValueType.IsArray)
             {
-
                 this.Converter = new ArrayCustomConverter(Assigner.ValueType.GetElementType());
-                //.MakeArrayType()
             }
             else
             {
                 this.Converter = TypeDescriptor.GetConverter(this.Assigner.ValueType);
-            }
-        }
+			}
+
+
+			if (this.Converter == null)
+			{
+				throw new Exception($"not found converter for {columnName} - {this.Assigner.ValueType.Name}");
+			}
+		}
     }
     
 }

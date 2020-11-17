@@ -17,6 +17,7 @@ namespace Npgg.Tests
 			public int Key { get; set; }
 			public string Value;
 			public string Value2;
+			public int? NullableInt;
 		}
 
 		string MakeRow(params object[] values) => string.Join(',', values);
@@ -162,6 +163,35 @@ bbbb,Value1
 
 				Assert.Equal(2, item.Key);
 				Assert.Equal("Value2", item.Value);
+			}
+		}
+
+
+
+		[Fact]
+		public void NullableTest()
+		{
+			string csv =
+@"Key,NullableInt,END
+1,,,
+2,15,,
+";
+
+			var loaded = loader.Load<SampleObject>(csv);
+
+			Assert.Equal(2, loaded.Count);
+
+			{
+				var item = loaded.First();
+
+				Assert.Equal(1, item.Key);
+				Assert.Null(item.NullableInt);
+			}
+			{
+				var item = loaded.Last();
+
+				Assert.Equal(2, item.Key);
+				Assert.Equal(15, item.NullableInt.Value);
 			}
 		}
 	}
