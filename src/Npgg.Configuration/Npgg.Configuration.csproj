@@ -1,14 +1,14 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>netstandard2.1;netstandard2.0</TargetFrameworks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Copyright></Copyright>
     <Description>Csv,Tsv string to c# object deserializer</Description>
     <PackageProjectUrl>https://github.com/Newp/Npgg.Configuration</PackageProjectUrl>
-    <AssemblyVersion>1.3.1.0</AssemblyVersion>
-    <FileVersion>1.3.1.0</FileVersion>
-    <Version>1.3.1</Version>
+    <AssemblyVersion>1.3.2.0</AssemblyVersion>
+    <FileVersion>1.3.2.0</FileVersion>
+    <Version>1.3.2</Version>
     <RepositoryUrl>https://github.com/Newp/Npgg.Configuration</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>csv tsv convert parse</PackageTags>
