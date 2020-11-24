@@ -101,7 +101,8 @@ namespace Npgg.Configuration
 
 					foreach (var binder in binders)
 					{
-						var cellValue = rowNumber[binder.RawIndex];
+
+						string cellValue = rowNumber.Length > binder.RawIndex ? rowNumber[binder.RawIndex] : string.Empty ;
 
 						try
 						{
