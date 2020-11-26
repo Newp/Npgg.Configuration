@@ -169,6 +169,35 @@ bbbb,Value1
 
 
 		[Fact]
+		public void TailingTest2()
+		{
+			string csv =
+@"Key,Value,
+1
+2,Value2,
+";
+
+			var loaded = loader.Load<SampleObject>(csv);
+
+			Assert.Equal(2, loaded.Count);
+
+			{
+				var item = loaded.First();
+
+				Assert.Equal(1, item.Key);
+				Assert.Equal( string.Empty, item.Value);
+			}
+			{
+				var item = loaded.Last();
+
+				Assert.Equal(2, item.Key);
+				Assert.Equal("Value2", item.Value);
+			}
+		}
+
+
+
+		[Fact]
 		public void NullableTest()
 		{
 			string csv =
