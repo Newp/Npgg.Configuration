@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reflection;
+using Npgg.Reflection;
 
 namespace Npgg.Configuration
 {
@@ -10,14 +11,14 @@ namespace Npgg.Configuration
     {
         public string ColumnName { get; set; }
         public int RawIndex { get; set; }
-        public MemberAssigner Assigner { get; set; }
+        public MemberAccessor Assigner { get; set; }
         public TypeConverter Converter { get; set; }
 
         public BindInfo(string columnName, int rawIndex, MemberInfo memberInfo)
         {
             this.ColumnName = columnName;
             this.RawIndex = rawIndex;
-            this.Assigner = new MemberAssigner(memberInfo);
+            this.Assigner = new MemberAccessor(memberInfo);
 
             if (Assigner.ValueType.IsGenericType)
             {

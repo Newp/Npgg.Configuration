@@ -14,4 +14,8 @@
     <PackageTags>csv tsv convert parse</PackageTags>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Npgg.MemberAccessor" Version="1.1.3" />
+  </ItemGroup>
+
 </Project>
