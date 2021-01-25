@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -45,7 +46,6 @@ namespace Npgg.Configuration
 			return row.Select(cell => cell.Trim(' ', '"')).ToArray();
 		}
 
-		
 
 		public List<T> Load<T>(string tableString) where T : new()
 		{
@@ -126,5 +126,39 @@ namespace Npgg.Configuration
 		}
 
 
+		public string ToCsvString<T>(IEnumerable<T> values) => ObjectToString<T>(values, ',');
+		public string ToTsvString<T>(IEnumerable<T> values) => ObjectToString<T>(values, '\t');
+
+		string ObjectToString<T>(IEnumerable<T> values, char spliter)
+		{
+			var accessors = Reflection.MemberAccessor.GetAccessors<T>();
+
+			StringBuilder builder = new StringBuilder();
+
+			foreach (var accessor in accessors)
+			{
+				builder.Append($"{accessor.Key}");
+				builder.Append(spliter);
+			}
+
+			builder.Length--;
+			builder.Append('\n');
+
+			foreach (var item in values)
+			{
+				foreach (var accessor in accessors)
+				{
+					var value = accessor.Value.GetValue(item);
+					builder.Append($"\"{value}\"");
+					builder.Append(spliter);
+				}
+
+				builder.Length--;
+				builder.Append('\n');
+			}
+
+			builder.Length--;
+			return builder.ToString();
+		}
 	}
 }
