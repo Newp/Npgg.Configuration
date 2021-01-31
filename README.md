@@ -188,3 +188,31 @@ public class ConvertException : Exception
 	public int LineNumber { get; }
 }
 ```
+
+
+
+### IEnumerable<T>를 통해 CSV 파일 생성
+필드안에서 쉼표(,)로 구분하며, CSV의 경우 필드를 따옴표(")로 감싸줍니다.
+
+```csharp
+class Sample
+{
+	public string A { get; set; }
+	public int B { get; set; }
+}
+```
+
+```csharp
+var csv = loader.ToCsvString(new[] {
+				new Sample() { A = "aaa", B = 1333 },
+				new Sample() { A = "bbb", B = 3939 },
+			});
+			
+/* csv is
+A,B
+"aaa","1333"
+"bbb","3939"
+*/
+
+```
+		
