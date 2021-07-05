@@ -1,6 +1,8 @@
 using Xunit;
 using System.Linq;
 using Npgg.Configuration;
+using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace Npgg.Tests
 {
@@ -53,8 +55,42 @@ namespace Npgg.Tests
 					.Select(d => float.Parse(d)).ToArray(); // array[1, 2, 3]
 
 				return new Vector3() { X = splited[0], Y = splited[1], Z = splited[2] };
-			
+
 			}
+		}
+		class DictionaryConverter : CustomConverter<Dictionary<string, byte[]>>
+		{
+			public override Dictionary<string, byte[]> Convert(string value) //input (1,2,3)
+			{
+				return JsonConvert.DeserializeObject<Dictionary<string, byte[]>>(value);
+			}
+		}
+
+
+
+		class Dictionarys
+		{
+			public Dictionary<string, byte[]> Value { get; set; }
+		}
+
+		[Fact]
+		public void DictionaryMemberConverterTest()
+		{
+			var dic = new Dictionary<string, byte[]>()
+			{
+				{ "aa", new byte[] {1, 2, 3 } }
+			};
+
+			var json = JsonConvert.SerializeObject(dic);
+
+			var csvString = "Value\n" + json;
+
+			CustomConverter<Dictionary<string, byte[]>>.RegistConverter<DictionaryConverter>();
+
+			CsvLoader loader = new CsvLoader();
+
+			var list = loader.Load<Dictionarys>(csvString);
+
 		}
 	}
 

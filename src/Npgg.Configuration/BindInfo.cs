@@ -20,34 +20,38 @@ namespace Npgg.Configuration
             this.RawIndex = rawIndex;
             this.Assigner = new MemberAccessor(memberInfo);
 
-            if (Assigner.ValueType.IsGenericType)
-            {
-                Type genericType = Assigner.ValueType.GetGenericTypeDefinition();
-                Type[] argTypes = Assigner.ValueType.GetGenericArguments();
-
-                if (genericType == typeof(List<>))
-                {
-                    this.Converter = new ListCustomConverter(genericType.MakeGenericType(argTypes[0]), argTypes[0]);
-                }
-				else if (genericType == typeof(Nullable<>))
-				{
-					this.Converter = TypeDescriptor.GetConverter(this.Assigner.ValueType);
-				}
-            }
-            else if (Assigner.ValueType.IsArray)
-            {
-                this.Converter = new ArrayCustomConverter(Assigner.ValueType.GetElementType());
-            }
-            else
-            {
-                this.Converter = TypeDescriptor.GetConverter(this.Assigner.ValueType);
-			}
+			this.Converter = GetConverter(this.Assigner.ValueType);
 
 
 			if (this.Converter == null)
 			{
 				throw new Exception($"not found converter for {columnName} - {this.Assigner.ValueType.Name}");
 			}
+		}
+
+		public static TypeConverter GetConverter(Type valueType)
+		{
+
+			if (valueType.IsGenericType)
+			{
+				Type genericType = valueType.GetGenericTypeDefinition();
+				Type[] argTypes = valueType.GetGenericArguments();
+
+				if (genericType == typeof(List<>))
+				{
+					return new ListCustomConverter(genericType.MakeGenericType(argTypes[0]), argTypes[0]);
+				}
+				else if (genericType == typeof(Nullable<>))
+				{
+					return TypeDescriptor.GetConverter(valueType);
+				}
+			}
+			else if (valueType.IsArray)
+			{
+				return new ArrayCustomConverter(valueType.GetElementType());
+			}
+			
+			return TypeDescriptor.GetConverter(valueType);
 		}
     }
     
