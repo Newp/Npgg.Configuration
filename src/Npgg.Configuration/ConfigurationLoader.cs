@@ -12,6 +12,8 @@ namespace Npgg.Configuration
 
 	public class CsvLoader : ConfigurationLoader
 	{
+		static CsvLoader _shared = null;
+		public static CsvLoader Shared =>_shared ?? (_shared = new CsvLoader());
 		public const string SplitPatten = ",(?=(?:[^\"]*\"[^\"]*\")*(?![^\"]*\"))";
 		public CsvLoader() : base(SplitPatten)
 		{
@@ -20,7 +22,8 @@ namespace Npgg.Configuration
 	}
 	public class TsvLoader : ConfigurationLoader
 	{
-
+		static TsvLoader _shared = null;
+		public static TsvLoader Shared => _shared ?? (_shared = new TsvLoader());
 		public const string SplitPatten = "\t(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)";
 
 		public TsvLoader() : base(SplitPatten)
