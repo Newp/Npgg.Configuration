@@ -35,7 +35,7 @@ jobs:
     - name: Publish to NuGet
       uses: brandedoutcast/publish-nuget@v2
       with:
-        PROJECT_FILE_PATH: ./Npgg.Configuration/Npgg.Configuration.csproj
+        PROJECT_FILE_PATH: ./src/Npgg.Configuration/Npgg.Configuration.csproj
         VERSION_REGEX: '^\s*<Version>(.*)<\/Version>\s*$'
         TAG_FORMAT: '*'
         NUGET_KEY: ${{secrets.NUGET_API_KEY}}
