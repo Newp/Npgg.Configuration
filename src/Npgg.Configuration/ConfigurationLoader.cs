@@ -50,7 +50,7 @@ namespace Npgg.Configuration
 		}
 
 
-		public List<T> Load<T>(string tableString) where T : new()
+		public virtual List<T> Load<T>(string tableString) where T : new()
 		{
 			var type = typeof(T);
 			var result = new List<T>();
