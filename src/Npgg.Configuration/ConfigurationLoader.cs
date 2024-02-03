@@ -10,23 +10,23 @@ using System.Threading.Tasks;
 namespace Npgg.Configuration
 {
 
-	public static class CsvLoader : ConfigurationLoader
+	public class CsvLoader : ConfigurationLoader
 	{
 		static CsvLoader _shared = null;
 		public static CsvLoader Shared =>_shared ?? (_shared = new CsvLoader());
 		public const string SplitPatten = ",(?=(?:[^\"]*\"[^\"]*\")*(?![^\"]*\"))";
-		CsvLoader() : base(SplitPatten)
+		public CsvLoader() : base(SplitPatten)
 		{
 
 		}
 	}
-	public static class TsvLoader : ConfigurationLoader
+	public class TsvLoader : ConfigurationLoader
 	{
 		static TsvLoader _shared = null;
 		public static TsvLoader Shared => _shared ?? (_shared = new TsvLoader());
 		public const string SplitPatten = "\t(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)";
 
-		TsvLoader() : base(SplitPatten)
+		public TsvLoader() : base(SplitPatten)
 		{
 
 		}
