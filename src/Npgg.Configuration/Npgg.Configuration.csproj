@@ -6,9 +6,8 @@
     <Copyright></Copyright>
     <Description>Csv,Tsv string to c# object deserializer</Description>
     <PackageProjectUrl>https://github.com/Newp/Npgg.Configuration</PackageProjectUrl>
-    <AssemblyVersion>1.5.2.0</AssemblyVersion>
-    <FileVersion>1.5.2.0</FileVersion>
-    <Version>1.5.2</Version>
+    <Version>1.6.0</Version>
+    <AssemblyVersion>$(Version)</AssemblyVersion>
     <RepositoryUrl>https://github.com/Newp/Npgg.Configuration</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>csv tsv convert parse</PackageTags>
