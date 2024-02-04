@@ -16,22 +16,42 @@ namespace Npgg.Tests
 
         string csv = @"Key ,Values ,Tag
 1,""1,2,3,4,5"",tag ";
-        [Fact]
-        public void StringListTest()
-        {
+		[Fact]
+		public void StringListTest()
+		{
 
-            var list = loader.Load<ArraySample<string>>(csv);
+			var list = loader.Load<ArraySample<string>>(csv);
 
-            Assert.Single(list);
+			Assert.Single(list);
 
-            var item = list.Last();
+			var item = list.Last();
 
-            Assert.Equal(1, item.Key);
-            Assert.Equal(5, item.Values.Length);
-            Assert.Equal("tag", item.Tag);
-        }
+			Assert.Equal(1, item.Key);
+			Assert.Equal(5, item.Values.Length);
+			Assert.Equal("tag", item.Tag);
+		}
 
-        [Fact]
+
+		[Fact]
+		public void EmptyIntArrayTest()
+		{
+
+			string csv = @"Key ,Values ,Tag
+1,"""",tag ";
+			var list = loader.Load<ArraySample<int>>(csv);
+
+			Assert.Single(list);
+
+			var item = list.Last();
+
+			Assert.Equal(1, item.Key);
+			Assert.Equal(0, item.Values.Length);
+			Assert.Equal("tag", item.Tag);
+		}
+
+
+
+		[Fact]
         public void IntListTest()
         {
 

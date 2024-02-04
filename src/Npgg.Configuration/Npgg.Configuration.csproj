@@ -6,7 +6,7 @@
     <Copyright></Copyright>
     <Description>Csv,Tsv string to c# object deserializer</Description>
     <PackageProjectUrl>https://github.com/Newp/Npgg.Configuration</PackageProjectUrl>
-    <Version>1.6.2</Version>
+    <Version>1.6.3</Version>
     <AssemblyVersion>$(Version)</AssemblyVersion>
     <RepositoryUrl>https://github.com/Newp/Npgg.Configuration</RepositoryUrl>
     <RepositoryType>git</RepositoryType>

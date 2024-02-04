@@ -17,7 +17,14 @@ namespace Npgg.Configuration
 
         public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
         {
-            var splited = value.ToString().Trim('\"').Split(',');
+			var text = value.ToString();
+
+			if(string.IsNullOrWhiteSpace(text)) 
+			{
+				return Array.CreateInstance(this.itemType, 0);
+			}
+
+            var splited = text.Trim('\"').Split(',');
 
             var array = Array.CreateInstance(this.itemType, splited.Length);
 
